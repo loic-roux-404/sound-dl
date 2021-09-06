@@ -7,7 +7,8 @@
     "jxabundler": "^1.0.12"
   },
   "scripts": {
-    "dev": "jxabundler watch",
+    "test:run": "osascript build/$npm_package_name.js",
+    "dev": "jxabundler --sourcemap watch",
     "build": "jxabundler -t app",
     "test": "jest",
     "start": "jxabundler watch -t app"
