@@ -4,16 +4,22 @@
   "private": true,
   "dependencies": {
     "cjxa-scripts": "0.0.13",
-    "jxabundler": "^1.0.12"
+    "jxabundler": "^1.0.12",
+    "soundcloud-scraper": "^5.0.2"
   },
   "scripts": {
+    "start": "jxabundler watch -t app",
     "test:run": "osascript build/$npm_package_name.js",
-    "dev": "jxabundler --sourcemap watch",
+    "test:sc": "SC_DEST=/Users/loic/Music/test/ node src/sc.js",
     "build": "jxabundler -t app",
     "test": "jest",
-    "start": "jxabundler watch -t app"
+    "package:app-zip": "zip -r build/$npm_package_name.app.zip build/$npm_package_name.js.app",
+    "package": "npm run build && npm run package:app-zip"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "devDependencies": {
+    "esbuild-node-tsc": "^1.6.1"
   }
 }

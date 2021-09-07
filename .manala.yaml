@@ -1,0 +1,12 @@
+manala:
+    recipe: dev.jxa
+    repository: /Users/loic/Ops/manala-recipes
+
+# Default vars
+semantic_release:
+    exec: 
+        publishCmd: npm run package
+    github: 
+        assets:
+            - { path: ./build/*.zip }
+            - { path: ./build/*.js }

@@ -1,23 +1,7 @@
-import sc from './soundscrape'
+import HELP from './help'
 
 const app = Application.currentApplication();
 app.includeStandardAdditions = true;
-
-const HELP = `
-Soundcloud / bandcamp downloader :
-
-Help: 
-- Download Artist by just using artist name ("-n 3" limit download to 3 tracks)
-    example : anethamusic -n 3
-
-- For Tracks or Sets use url
-    example : https://soundcloud.com/anethamusic/05h33-adagio-piano-sonata-no-14-moonlight-beethoven-remixed
-
-- For Likes use /likes url of your username : https://soundcloud.com/loicrx69/likes
-
-- Bandcamp type url with "-b" : https://mamatoldya.bandcamp.com/ -b
-
-Write your command in the dialog below:`
 
 const buttons = ['Previous', 'Continue']
 
@@ -50,7 +34,7 @@ function process() {
 
     if (!validateDialog(dialog)) {
       current--
-      
+
       continue
     }
 
@@ -63,14 +47,14 @@ function process() {
 
 /**
  * run on App start
- * 
- * @param {[]} _ Cli arguments 
+ *
+ * @param {[]} _ Cli arguments
  */
 export function run(_) {
-  const processed = process() 
+  const processed = process()
 
-  if (!process) { 
-    app.displayDialog("Stopped", { buttons: ["ok"] })
+  if (!processed) {
+    app.displayDialog("Stopped", { buttons: ["Confirm"] })
     return 'Stopped'
   };
 
@@ -80,10 +64,16 @@ export function run(_) {
 }
 
 const main = ({ folder, cmd }) => {
-  sc({ folder, cmd })
-};
+  app.doShellScript(
+    'curl -fSsL https://raw.githubusercontent.com/loic-roux-404/sound-dl/master/install.sh | bash',
+    { administratorPrivileges: true }
+  )
 
-// drag & drop as AppleScript App saved
-export function openDocuments(docs) {
-  main(docs);
-}
+  const res = app.doShellScript(`SC_DEST=${folder} sc ${cmd}`)
+  console.log(res)
+
+  app.displayDialog(
+    "Download done, check all your song are in " + fodler,
+    { buttons: ["Confirm"] }
+  )
+};
