@@ -80,7 +80,7 @@ export function run(_) {
 }
 
 const main = ({ folder, cmd }) => {
-  sc(app, { folder, cmd })
+  sc({ folder, cmd })
 };
 
 // drag & drop as AppleScript App saved

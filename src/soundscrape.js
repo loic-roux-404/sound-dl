@@ -46,8 +46,9 @@ function deletePy(app) {
     `)
 }
 
-export default (app, { cmd, folder, uninstall = false }) => {
-//    app.doShellScript(`cd ${folder}`)
+export default ({ cmd, folder, uninstall = false }) => {
+    const app = Application.currentApplication();
+    app.includeStandardAdditions = true;
     pyInstall(app)
     pyEnv(app)
 
@@ -55,11 +56,11 @@ export default (app, { cmd, folder, uninstall = false }) => {
         deletePy(app)
         return
     }
+    app.doShellScript('source soundscrape/bin/activate')
+    const res = app.doShellScript(`cd ${folder} && soundscrape -f ${cmd}`);
 
-    app.doShellScript(`
-        source soundscrape/bin/activate
-        cd ${folder} && soundscrape -f ${cmd}
-        deactivate
-    `)
-    app.displayDialog("Success");
+    app.displayDialog("Result : " + String(res))
+    app.doShellScript('deactivate')
+
+    return res
 }
