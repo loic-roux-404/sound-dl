@@ -8,4 +8,4 @@
 ## Usage
 
 - UI: Launch app and follow prompts
-- Shell : `sc <your-command>` [Help](./src/help.js)
+- Shell : `SC_DEST=destPath sc <your-command>` [Help](./src/help.js)

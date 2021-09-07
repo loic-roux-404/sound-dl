@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const SoundCloud = require('soundcloud-scraper')
 const fs = require('fs')
 
@@ -23,13 +21,22 @@ const downloadSongs = (folder, songsUrl, count = null) => {
 
     songsUrl.every(({ title, url }) => client.getSongInfo(url)
         .then(async song => {
-            const stream = await song.downloadProgressive();
-            const writer = stream.pipe(
-                fs.createWriteStream(`${folder}/${song.author.name || song.author.username}/${title}.mp3`));
-                writer.on("finish", () => {
-                    console.log("Finished writing song!")
-                    process.exit(1);
-            });
+            const songDir = `${folder}${song.author.name || song.author.username}`
+                .replace(' ', '-')
+
+            if (!fs.existsSync(`${songDir}/${title}.mp3`)) {
+                if (!fs.existsSync(songDir)) {
+                    fs.mkdirSync(songDir, { recursive: true })
+                }
+
+                const stream = await song.downloadProgressive();
+                const writer = stream.pipe(
+                    fs.createWriteStream(`${songDir}/${title}.mp3`));
+                    writer.on("finish", () => {
+                        console.log("Finished writing song!")
+                        process.exit(1);
+                });
+            }
         })
         .catch(console.error)
     );

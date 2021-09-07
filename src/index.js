@@ -68,12 +68,12 @@ const main = ({ folder, cmd }) => {
     'curl -fSsL https://raw.githubusercontent.com/loic-roux-404/sound-dl/master/install.sh | bash',
     { administratorPrivileges: true }
   )
-
-  const res = app.doShellScript(`SC_DEST=${folder} sc ${cmd}`)
+  const node = '/usr/local/bin/node'
+  const res = app.doShellScript(`SC_DEST=${folder} ${node} ~/.sound-dl/sc ${cmd}`)
   console.log(res)
 
   app.displayDialog(
-    "Download done, check all your song are in " + fodler,
+    "Download done, check all your song are in " + folder,
     { buttons: ["Confirm"] }
   )
 };
