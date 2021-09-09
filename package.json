@@ -1,6 +1,6 @@
 {
   "name": "sound-dl",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
     "cjxa-scripts": "0.0.13",
@@ -10,7 +10,9 @@
   "scripts": {
     "start": "jxabundler watch -t app",
     "test:run": "osascript build/$npm_package_name.js",
-    "test:sc": "SC_DEST=/Users/loic/Music/test/ node src/sc.js",
+    "test:sc:likes": "SC_DEST=$HOME/Music/test/ node src/sc.js anethamusic -l -n 2",
+    "test:sc:sets": "SC_DEST=$HOME/Music/test/ node src/sc.js https://soundcloud.com/loicrx69/sets/engage -n 2",
+    "test:sc": "SC_DEST=$HOME/Music/test/ node src/sc.js anethamusic -n 2",
     "build": "jxabundler -t app",
     "test": "jest",
     "package:app-zip": "zip -r build/$npm_package_name.app.zip build/$npm_package_name.js.app",

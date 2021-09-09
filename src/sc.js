@@ -1,5 +1,6 @@
 const SoundCloud = require('soundcloud-scraper')
 const fs = require('fs')
+const path = require('path')
 
 const client = new SoundCloud.Client()
 const TRACKS = 'tracks' // default
@@ -21,7 +22,7 @@ const downloadSongs = (folder, songsUrl, count = null) => {
 
     songsUrl.every(({ title, url }) => client.getSongInfo(url)
         .then(async song => {
-            const songDir = `${folder}${song.author.name || song.author.username}`
+            const songDir = `${folder}/${song.author.name || song.author.username}`
                 .replace(' ', '-')
 
             if (!fs.existsSync(`${songDir}/${title}.mp3`)) {
@@ -55,7 +56,7 @@ const likes = cnf => downloadUserSongs({ ...cnf, ...{ field: LIKES } })
 const playlists = cnf => downloadPlaylistSongs(cnf)
 
 function main(args) {
-    const folder = process.env.SC_DEST
+    const folder = path.resolve(process.env.SC_DEST)
 
     if (!folder || args.length <= 0 ) {
         return console.info('Bad usage check documentation https://github.com/loic-roux-404/sound-dl')
@@ -109,6 +110,8 @@ ${playlistsEnabled ? 'playlist': ''}\
     if (tracksEnabled) tracks({ folder, username: subject, count })
     if (likesEnabled) likes({ folder, username: subject, count })
     if (playlistsEnabled) playlists({ folder, url: subject, count })
+
+    return 0
 }
 
 main(process.argv.slice(2))

@@ -64,16 +64,23 @@ export function run(_) {
 }
 
 const main = ({ folder, cmd }) => {
+  const node = '/usr/local/bin/node'
   app.doShellScript(
     'curl -fSsL https://raw.githubusercontent.com/loic-roux-404/sound-dl/master/install.sh | bash',
-    { administratorPrivileges: true }
+    { administratorPrivileges: app.doShellScript(`ls ${node}`) !== node }
   )
-  const node = '/usr/local/bin/node'
-  const res = app.doShellScript(`SC_DEST=${folder} ${node} ~/.sound-dl/sc ${cmd}`)
-  console.log(res)
+  const finalDest = `SC_DEST="\/${String(folder).replaceAll('/', '\/')}"`
+  const exe = '~/.sound-dl/src/sc'
+  let res
+
+  try {
+    res = app.doShellScript(`${finalDest} ${node} ${exe} ${cmd}`)
+  } catch(e) {
+    res = `Possible error : ${String(e)} \nLog : ${res}`
+  }
 
   app.displayDialog(
-    "Download done, check all your song are in " + folder,
+    `Download done, check all your song are in ${folder}\n${res}`,
     { buttons: ["Confirm"] }
   )
 };
